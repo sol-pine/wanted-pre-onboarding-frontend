@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
-import {createTodo, deleteTodo, getTodos, updateTodo} from "../router/apis";
+import {createTodo, deleteTodo, getTodos, updateTodo} from "../utils/apis";
 
 const ListPage = () => {
         const navigate = useNavigate();
