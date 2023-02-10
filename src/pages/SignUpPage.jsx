@@ -4,6 +4,8 @@ import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import isEmailValid from "../utils/isEmailValid";
+import isPasswordValid from "../utils/isPasswordValid";
 
 const SignUpPage = () => {
     const navigate = useNavigate();
@@ -16,18 +18,6 @@ const SignUpPage = () => {
         if (token) navigate("/todo");
     }, [token])
 
-    // 이메일 유효성 검사
-    const isEmailValid = () => {
-        const regExp = /@/;
-        return regExp.test(email);
-    };
-
-    // 비밀번호 유효성 검사
-    const isPasswordValid = () => {
-        const regExp = /^.{8,}$/;
-        return regExp.test(password);
-    };
-
     // 회원가입
     const handleSignUp = () => {
         signUp(email, password).then(() => navigate("/signin"))
@@ -38,13 +28,13 @@ const SignUpPage = () => {
             <Title>회원가입 페이지</Title>
             <Input data-testid="email-input" type="text" onChange={(e) => setEmail(e.target.value)}
                    placeholder="이메일을 입력해주세요 (@ 필수 포함)"/>
-            {email && !isEmailValid() ? <ErrorMsg>이메일 형식을 확인해주세요</ErrorMsg> : null}
+            {email && !isEmailValid(email) ? <ErrorMsg>이메일 형식을 확인해주세요</ErrorMsg> : null}
             <Input data-testid="password-input" type="password" onChange={(e) => setPassword(e.target.value)}
-                   placeholder="비밀번호를 입력해주세요 (8자 이상)" isNotValid={password && !isPasswordValid()}
+                   placeholder="비밀번호를 입력해주세요 (8자 이상)" isNotValid={password && !isPasswordValid(password)}
                    message="비밀번호 형식을 확인해주세요"/>
             <br/>
             <Button data-testid="signup-button"  onClick={handleSignUp}
-                    disabled={!isEmailValid() || !isPasswordValid()}>
+                    disabled={!isEmailValid(email) || !isPasswordValid(password)}>
                 회원가입
             </Button>
         </Container>
