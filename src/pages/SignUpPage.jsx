@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {signUp} from "../router/apis";
 import {useNavigate} from "react-router-dom";
 
@@ -6,6 +6,12 @@ const SignUpPage = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const token = localStorage.getItem("token");
+
+    // 로그인 여부에 따른 리다이렉트 처리
+    useEffect(() => {
+        if (token) navigate("/todo");
+    }, [token])
 
     // 이메일 유효성 검사
     const isEmailValid = () => {
