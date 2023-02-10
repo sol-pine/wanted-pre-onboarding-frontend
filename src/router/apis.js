@@ -7,3 +7,8 @@ export const signIn = (email, password) => axiosInstance.post("/auth/signin", {e
 export const createTodo = (todo) => axiosInstance.post("/todos", {todo: todo});
 
 export const getTodos = () => axiosInstance.get("/todos");
+
+export const updateTodo = (id, todo, isCompleted) => axiosInstance.put(`/todos/${id}`, {
+    todo: todo,
+    isCompleted: isCompleted
+});

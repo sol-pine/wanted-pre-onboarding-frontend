@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
-import {createTodo, getTodos} from "../router/apis";
+import {createTodo, getTodos, updateTodo} from "../router/apis";
 
 const ListPage = () => {
         const navigate = useNavigate();
@@ -32,16 +32,15 @@ const ListPage = () => {
                 <br/>
                 <br/>
                 {todos.map(({id, todo, isCompleted}) => (
-                    <>
-                        <li id={id}>
-                            <label>
-                                <input type="checkbox" checked={isCompleted}/>
-                                <span>{todo}</span>
-                            </label>
-                            <button data-testid="modify-button">수정</button>
-                            <button data-testid="delete-button">삭제</button>
-                        </li>
-                    </>
+                    <li key={id}>
+                        <label>
+                            <input type="checkbox" defaultChecked={isCompleted}
+                                   onChange={() => updateTodo(id, todo, !isCompleted)}/>
+                            <span>{todo}</span>
+                        </label>
+                        <button data-testid="modify-button">수정</button>
+                        <button data-testid="delete-button">삭제</button>
+                    </li>
                 ))}
             </>
         );
