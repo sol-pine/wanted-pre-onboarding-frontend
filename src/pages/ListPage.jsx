@@ -5,7 +5,9 @@ import {createTodo, deleteTodo, getTodos, updateTodo} from "../utils/apis";
 const ListPage = () => {
         const navigate = useNavigate();
         const [todo, setTodo] = useState("");
+        const [newTodo, setNewTodo] = useState("");
         const [todos, setTodos] = useState([]);
+        const [editableId, setEditableId] = useState(0);
         const token = localStorage.getItem("token");
 
         // 로그인 여부에 따른 리다이렉트 처리
@@ -20,7 +22,10 @@ const ListPage = () => {
 
         // 투두 추가
         const handleCreate = () => {
-            createTodo(todo).then(() => getTodos().then((response) => setTodos(response.data)));
+            createTodo(todo).then(() => {
+                setTodo("");
+                getTodos().then((response) => setTodos(response.data));
+            });
         }
 
         // 투두 삭제
@@ -28,10 +33,18 @@ const ListPage = () => {
             deleteTodo(id).then(() => getTodos().then((response) => setTodos(response.data)));
         }
 
+        // 투두 수정
+        const handleUpdate = (id, todo, isCompleted) => {
+            updateTodo(id, todo, isCompleted).then(() => {
+                setEditableId(0)
+                getTodos().then((response) => setTodos(response.data))
+            });
+        }
+
         return (
             <>
                 <h1>TODO LIST</h1>
-                <input data-testid="new-todo-input" type="text" onChange={e => setTodo(e.target.value)}/>
+                <input data-testid="new-todo-input" type="text" onChange={e => setTodo(e.target.value)} value={todo}/>
                 <button data-testid="new-todo-add-button" onClick={handleCreate}>추가</button>
                 <br/>
                 <br/>
@@ -40,11 +53,25 @@ const ListPage = () => {
                     <li key={id}>
                         <label>
                             <input type="checkbox" defaultChecked={isCompleted}
-                                   onChange={() => updateTodo(id, todo, !isCompleted)}/>
-                            <span>{todo}</span>
+                                   onChange={() => handleUpdate(id, todo, !isCompleted)}/>
+                            {editableId === id ?
+                                <input data-testid="modify-input" defaultValue={todo}
+                                       onChange={e => setNewTodo(e.target.value)}/> :
+                                <span>{todo}</span>}
                         </label>
-                        <button data-testid="modify-button">수정</button>
-                        <button data-testid="delete-button" onClick={() => handleDelete(id)}>삭제</button>
+                        {
+                            editableId === id ? <>
+                                <button data-testid="submit-button"
+                                        onClick={() => handleUpdate(id, newTodo, isCompleted)}>제출
+                                </button>
+                                <button data-testid="cancel-button" onClick={() => setEditableId(0)}>취소
+                                </button>
+                            </> : <>
+                                <button data-testid="modify-button" onClick={() => setEditableId(id)}>수정</button>
+                                <button data-testid="delete-button" onClick={() => handleDelete(id)}>삭제</button>
+                            </>
+                        }
+
                     </li>
                 ))}
             </>
