@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
+import {signUp} from "../router/apis";
+import {useNavigate} from "react-router-dom";
 
 const SignUpPage = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -16,6 +19,11 @@ const SignUpPage = () => {
         return regExp.test(password);
     };
 
+    // 회원가입
+    const handleSignUp = () => {
+        signUp(email, password).then(() => navigate("/signin"))
+    }
+
     return (
         <>
             <h1>회원가입</h1>
@@ -25,7 +33,7 @@ const SignUpPage = () => {
             <input data-testid="password-input" type="password" onChange={(e) => setPassword(e.target.value)}/>
             {password && !isPasswordValid() ? <p>비밀번호 형식을 확인해주세요(8자 이상)</p> : null}
             <br/>
-            <button data-testid="signup-button" disabled={!isEmailValid() || !isPasswordValid()}>
+            <button data-testid="signup-button" onClick={handleSignUp} disabled={!isEmailValid() || !isPasswordValid()}>
                 회원가입
             </button>
         </>
