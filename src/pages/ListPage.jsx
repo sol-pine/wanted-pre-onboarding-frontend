@@ -62,7 +62,7 @@ const ListPage = () => {
                         {
                             editableId === id ? <>
                                 <button data-testid="submit-button"
-                                        onClick={() => handleUpdate(id, newTodo, isCompleted)}>제출
+                                        onClick={() => newTodo ? handleUpdate(id, newTodo, isCompleted) : setEditableId(0)}>제출
                                 </button>
                                 <button data-testid="cancel-button" onClick={() => setEditableId(0)}>취소
                                 </button>
