@@ -12,3 +12,5 @@ export const updateTodo = (id, todo, isCompleted) => axiosInstance.put(`/todos/$
     todo: todo,
     isCompleted: isCompleted
 });
+
+export const deleteTodo = (id) => axiosInstance.delete(`/todos/${id}`)

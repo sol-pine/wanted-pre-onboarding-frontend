@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
-import {createTodo, getTodos, updateTodo} from "../router/apis";
+import {createTodo, deleteTodo, getTodos, updateTodo} from "../router/apis";
 
 const ListPage = () => {
         const navigate = useNavigate();
@@ -23,6 +23,11 @@ const ListPage = () => {
             createTodo(todo).then(() => getTodos().then((response) => setTodos(response.data)));
         }
 
+        // 투두 삭제
+        const handleDelete = (id) => {
+            deleteTodo(id).then(() => getTodos().then((response) => setTodos(response.data)));
+        }
+
         return (
             <>
                 <h1>TODO LIST</h1>
@@ -39,7 +44,7 @@ const ListPage = () => {
                             <span>{todo}</span>
                         </label>
                         <button data-testid="modify-button">수정</button>
-                        <button data-testid="delete-button">삭제</button>
+                        <button data-testid="delete-button" onClick={() => handleDelete(id)}>삭제</button>
                     </li>
                 ))}
             </>
