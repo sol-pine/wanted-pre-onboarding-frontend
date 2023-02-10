@@ -25,7 +25,7 @@ const SignUpPage = () => {
             <input data-testid="password-input" type="password" onChange={(e) => setPassword(e.target.value)}/>
             {password && !isPasswordValid() ? <p>비밀번호 형식을 확인해주세요(8자 이상)</p> : null}
             <br/>
-            <button data-testid="signup-button">
+            <button data-testid="signup-button" disabled={!isEmailValid() || !isPasswordValid()}>
                 회원가입
             </button>
         </>
