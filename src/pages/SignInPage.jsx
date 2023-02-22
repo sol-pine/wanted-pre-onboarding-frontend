@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { signUp } from "../utils/apis";
+import { signIn } from "../utils/apis";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import Input from "../components/Input";
+import styled from "styled-components";
 import Button from "../components/Button";
 import isEmailValid from "../utils/isEmailValid";
 import isPasswordValid from "../utils/isPasswordValid";
 
-const SignUpPage = () => {
+const SignInPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,27 +18,30 @@ const SignUpPage = () => {
     if (token) navigate("/todo");
   }, [token]);
 
-  // 회원가입
-  const handleSignUp = () => {
-    signUp(email, password).then(() => navigate("/signin"));
+  // 로그인
+  const handleSignIn = () => {
+    signIn(email, password).then((response) => {
+      localStorage.setItem("token", response.data.access_token);
+      navigate("/todo");
+    });
   };
 
   return (
     <Container>
-      <Title>회원가입 페이지</Title>
+      <Title>로그인 페이지</Title>
       <Input data-testid="email-input" type="text" onChange={(e) => setEmail(e.target.value)} placeholder="이메일을 입력해주세요 (@ 필수 포함)" />
       {email && !isEmailValid(email) ? <ErrorMsg>이메일 형식을 확인해주세요</ErrorMsg> : null}
       <Input data-testid="password-input" type="password" onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호를 입력해주세요 (8자 이상)" />
       {password && !isPasswordValid(password) ? <ErrorMsg>비밀번호 형식을 확인해주세요</ErrorMsg> : null}
       <br />
-      <Button data-testid="signup-button" onClick={handleSignUp} disabled={!isEmailValid(email) || !isPasswordValid(password)}>
-        회원가입
+      <Button data-testid="signin-button" onClick={handleSignIn} disabled={!isEmailValid(email) || !isPasswordValid(password)}>
+        로그인
       </Button>
     </Container>
   );
 };
 
-export default SignUpPage;
+export default SignInPage;
 
 const Container = styled.div`
   width: 300px;
